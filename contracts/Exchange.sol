@@ -30,6 +30,11 @@ contract Exchange {
 
     }
 
+    function withdrawToken(address _token, uint256 _amount) public { 
+        
+        Token(_token).transfer(msg.sender, _amount);
+    }
+
     function balanceOf(address _token, address _user) public view returns (uint256) {
 
         return tokens[_token][_user];

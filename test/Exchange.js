@@ -77,6 +77,29 @@ describe('Exchange', () => {
   		})
 
   	})
+
+  describe('Withdrawing Tokens', () => {
+    let transaction
+    let result
+    let amount = tokens('10')
+
+  	describe('Success', () => {
+  		beforeEach(async () => {
+  		  transaction = await token1.connect(user1).approve(exchange.address, amount)
+  		  result = await transaction.wait()
+        transaction = await exchange.connect(user1).depositToken(token1.address, amount)
+        result = await transaction.wait()
+        transaction = await exchange.connect(user1).withdrawToken(token1.address, amount)
+        result = await transaction.wait()
+	    })	
+
+  		it('withdraws token funds', async () => {
+  			expect(await token1.balanceOf(exchange.address)).to.equal(0)
+  			
+  		})
+
+  	})
+
   })
 
 })
