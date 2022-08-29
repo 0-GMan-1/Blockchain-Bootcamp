@@ -78,6 +78,8 @@ describe('Exchange', () => {
 
   	})
 
+  })
+
   describe('Withdrawing Tokens', () => {
     let transaction
     let result
@@ -95,8 +97,48 @@ describe('Exchange', () => {
 
   		it('withdraws token funds', async () => {
   			expect(await token1.balanceOf(exchange.address)).to.equal(0)
+  			expect(await exchange.tokens(token1.address, user1.address)).to.equal(0)
+  			expect(await exchange.balanceOf(token1.address, user1.address)).to.equal(0)
   			
   		})
+
+  		it('Emits a deposit event', async () => {
+        const eventLog = result.events[1]
+
+        expect(eventLog.event).to.equal('Withdraw')
+      
+        const args = eventLog.args
+        expect(args._token).to.equal(token1.address)
+        expect(args._user).to.equal(user1.address)
+        expect(args._amount).to.equal(amount)
+        expect(args._balance).to.equal(0)
+      })
+
+
+  	})
+
+  	describe('Failure', () => {
+  		it('Fails when for insufficient balance', async () => {
+  			await expect(exchange.connect(user1).withdrawToken(token1.address, amount)).to.be.reverted
+  		})
+  	})
+
+  })
+
+  describe('Checking Balances', () => {
+    let transaction
+    let result
+    let amount = tokens('1')
+
+  	beforeEach(async () => {
+  		  transaction = await token1.connect(user1).approve(exchange.address, amount)
+  		  result = await transaction.wait()
+        transaction = await exchange.connect(user1).depositToken(token1.address, amount)
+        result = await transaction.wait()
+	    })	
+
+  		it('Returns user balance', async () => {
+  			expect(await exchange.balanceOf(token1.address, user1.address)).to.equal(amount)
 
   	})
 
