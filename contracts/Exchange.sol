@@ -56,7 +56,7 @@ contract Exchange {
 
         tokens[_token][msg.sender] = tokens[_token][msg.sender] - _amount;
 
-        emit Withdraw(_token, msg.sender, _amount, tokens[_token][msg.sender ]);
+        emit Withdraw(_token, msg.sender, _amount, tokens[_token][msg.sender]);
     }
 
     function balanceOf(address _token, address _user) public view returns (uint256) {

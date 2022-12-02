@@ -26,7 +26,7 @@ async function main() {
   const mDAI = await ethers.getContractAt('Token', config[chainId].mDAI.address)
   console.log(`mDAI Token fetched: ${mDAI.address}`)
 
-  const exchange = await ethers.getContractAt('Exchange', config[chainId].exchange.address)
+  const exchange = await ethers.getContractAt('Exchange', config[chainId].exchange  .address)
   console.log(`exchange fetched: ${exchange.address}\n`)
 
   // Distribute tokens
